@@ -1,7 +1,12 @@
+import AppProvider from "./providers/AppProvider";
 import AppRoutes from "./routes/AppRoutes";
 
-function App() {
-  return <AppRoutes />;
-}
+const App: React.FC = () => {
+  return (
+    <AppProvider>
+      <AppRoutes />
+    </AppProvider>
+  );
+};
 
 export default App;
