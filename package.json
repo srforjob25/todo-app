@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npm run dev -w client & npm run dev -w server",
+    "migrate": "npx prisma migrate dev --name init --schema=./packages/server/prisma/schema.prisma",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
