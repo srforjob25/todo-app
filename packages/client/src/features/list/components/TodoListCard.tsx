@@ -1,9 +1,12 @@
-import { Box, Card, Checkbox, IconButton, Typography } from "@mui/material";
+import { Box, Card, IconButton, Typography } from "@mui/material";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import UpdateIcon from "@mui/icons-material/Update";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AlarmIcon from "@mui/icons-material/Alarm";
 import { formatToJapaneseDate, getDateDifferenceInDays } from "../../../utils/dateUtil";
-import { Todo } from "../../../utils/trpc";
+import { Todo, trpc } from "../../../utils/trpc";
+import toast from "react-hot-toast";
 
 type Props = {
   todo: Todo;
@@ -30,11 +33,38 @@ const TodoListCard: React.FC<Props> = (props: Props) => {
     }
   };
 
+  const updateMutation = trpc.todo.updateCompletedStatus.useMutation();
+
+  const trpcUtils = trpc.useUtils();
+
+  const handleCheckBoxClick = () => {
+    updateMutation.mutate(
+      {
+        id: todo.id,
+        completed: !todo.completed,
+      },
+      {
+        onSuccess: () => {
+          toast.success("変更しました！");
+          trpcUtils.todo.getTodosOrderByDueDateAsc.invalidate();
+        },
+      },
+    );
+  };
+
   return (
     <Card className={`shadow-lg border-2 my-4 bg-opacity-10 ${getCardBackgroundColor()}`}>
       <Box className="flex">
         <Box className="flex items-center mx-3">
-          <Checkbox defaultChecked={todo.completed} />
+          {todo.completed ? (
+            <IconButton className="text-blue-600" onClick={handleCheckBoxClick}>
+              <CheckBoxIcon />
+            </IconButton>
+          ) : (
+            <IconButton onClick={handleCheckBoxClick}>
+              <CheckBoxOutlineBlankIcon />
+            </IconButton>
+          )}
         </Box>
         <Box className="flex flex-col grow">
           <Box className="my-4">
