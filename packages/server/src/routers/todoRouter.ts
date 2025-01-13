@@ -9,4 +9,14 @@ export const todoRouter = trpc.router({
       },
     });
   }),
+  getTodosOrderByDueDateAsc: trpc.procedure.query(() => {
+    return prisma.todo.findMany({
+      where: {
+        deleted: false,
+      },
+      orderBy: {
+        dueDate: "asc",
+      },
+    });
+  }),
 });

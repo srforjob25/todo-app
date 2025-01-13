@@ -2,6 +2,7 @@ import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } fr
 import { isMenuOpenAtom } from "../../../utils/jotai";
 import { useAtom } from "jotai";
 import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import { useNavigate } from "react-router-dom";
 
 const Menu: React.FC = () => {
@@ -17,6 +18,11 @@ const Menu: React.FC = () => {
     navigate("/hoge");
   };
 
+  const handleListButtonClick = () => {
+    closeMenu();
+    navigate("/list");
+  };
+
   return (
     <Drawer anchor="right" open={isMenuOpen} onClose={closeMenu}>
       <List>
@@ -26,6 +32,14 @@ const Menu: React.FC = () => {
               <TipsAndUpdatesIcon />
             </ListItemIcon>
             <ListItemText primary="メニュー項目" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={handleListButtonClick}>
+            <ListItemIcon>
+              <ChecklistIcon />
+            </ListItemIcon>
+            <ListItemText primary="ToDo一覧" />
           </ListItemButton>
         </ListItem>
       </List>

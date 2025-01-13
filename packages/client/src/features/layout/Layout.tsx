@@ -8,7 +8,7 @@ const Layout: React.FC = () => {
     <>
       <Header />
       <Menu />
-      <Box className="mx-4 flex flex-col justify-center">
+      <Box className="m-4 flex flex-col justify-center">
         <Outlet />
       </Box>
     </>

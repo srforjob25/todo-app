@@ -10,7 +10,8 @@ datasource db {
 model Todo {
   id Int @id @default(autoincrement())
   title String
-  contents String?
+  description String
+  dueDate DateTime
   completed Boolean @default(false)
   deleted Boolean @default(false)
   createdAt DateTime @default(now())
