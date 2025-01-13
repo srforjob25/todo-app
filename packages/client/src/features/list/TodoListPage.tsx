@@ -1,4 +1,4 @@
-import { Box, Skeleton, Tab } from "@mui/material";
+import { Box, Fab, Skeleton, Tab } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
@@ -8,6 +8,8 @@ import { useSetAtom } from "jotai";
 import { headerTitleAtom } from "../../utils/jotai";
 import { trpc } from "../../utils/trpc";
 import toast from "react-hot-toast";
+import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 
 const enum TabType {
   INCOMPLETE = "incomplete",
@@ -15,6 +17,8 @@ const enum TabType {
 }
 
 const TodoListPage: React.FC = () => {
+  const navigate = useNavigate();
+
   const setHeaderTitle = useSetAtom(headerTitleAtom);
   setHeaderTitle("ToDo一覧");
 
@@ -24,6 +28,10 @@ const TodoListPage: React.FC = () => {
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: TabType) => {
     setTabTypeValue(newValue);
+  };
+
+  const handleAddButtonClick = () => {
+    navigate("/create");
   };
 
   if (response.isError) {
@@ -67,6 +75,14 @@ const TodoListPage: React.FC = () => {
           </Box>
         </TabPanel>
       </TabContext>
+      <Box className="fixed right-4 bottom-4 flex justify-end">
+        <Box className="grow"></Box>
+        <Box>
+          <Fab color="primary" onClick={handleAddButtonClick}>
+            <AddIcon />
+          </Fab>
+        </Box>
+      </Box>
     </Box>
   );
 };

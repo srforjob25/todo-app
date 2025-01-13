@@ -14,7 +14,12 @@ export const todoRouter = trpc.router({
     });
   }),
   updateCompletedStatus: trpc.procedure
-    .input(z.object({ id: z.number(), completed: z.boolean() }))
+    .input(
+      z.object({
+        id: z.number(),
+        completed: z.boolean(),
+      }),
+    )
     .mutation(({ input }) => {
       return prisma.todo.update({
         where: {
@@ -22,6 +27,26 @@ export const todoRouter = trpc.router({
         },
         data: {
           completed: input.completed,
+        },
+      });
+    }),
+  create: trpc.procedure
+    .input(
+      z.object({
+        title: z.string(),
+        description: z.string(),
+        dueDate: z.date(),
+      }),
+    )
+    .mutation(({ input }) => {
+      const title = input.title;
+      const description = input.description;
+      const dueDate = input.dueDate;
+      return prisma.todo.create({
+        data: {
+          title: title,
+          description: description,
+          dueDate: dueDate,
         },
       });
     }),

@@ -20,7 +20,7 @@ const TodoListCard: React.FC<Props> = (props: Props) => {
       return "bg-green-300";
     }
 
-    const dueDate = new Date(todo.dueDate);
+    const dueDate = todo.dueDate;
 
     const diffDays = getDateDifferenceInDays(dueDate);
 
@@ -93,7 +93,7 @@ const TodoListCard: React.FC<Props> = (props: Props) => {
           <Box className="flex items-end my-2">
             <Box className="grow flex items-center">
               <AlarmIcon className="text-gray-500 mr-1" fontSize="small" />
-              <span className="text-gray-500">{formatToJapaneseDate(new Date(todo.dueDate))}</span>
+              <span className="text-gray-500">{formatToJapaneseDate(todo.dueDate)}</span>
             </Box>
             <IconButton className="pb-0 text-blue-600">
               <UpdateIcon fontSize="large" />
