@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useSetAtom } from "jotai";
 import { headerTitleAtom } from "../../utils/jotai";
 import { trpc } from "../../utils/trpc";
+import toast from "react-hot-toast";
 
 const enum TabType {
   INCOMPLETE = "incomplete",
@@ -26,6 +27,7 @@ const TodoListPage: React.FC = () => {
   };
 
   if (response.isError) {
+    toast.error("エラーが発生しました");
     return <></>;
   }
 
