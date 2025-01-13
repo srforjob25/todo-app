@@ -1,4 +1,4 @@
-import { Box, Fab, Skeleton, Tab } from "@mui/material";
+import { Box, Fab, Tab } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
@@ -40,13 +40,7 @@ const TodoListPage: React.FC = () => {
   }
 
   if (response.isLoading) {
-    return (
-      <Box className="w-full mt-8">
-        <Skeleton />
-        <Skeleton animation="wave" />
-        <Skeleton animation={false} />
-      </Box>
-    );
+    return <></>;
   }
 
   return (

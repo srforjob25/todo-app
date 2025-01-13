@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { trpc } from "../../utils/trpc";
 import toast from "react-hot-toast";
-import { Backdrop, Box, Button, CircularProgress, FormHelperText, Skeleton, TextField } from "@mui/material";
+import { Backdrop, Box, Button, CircularProgress, FormHelperText, TextField } from "@mui/material";
 import { useSetAtom } from "jotai";
 import { headerTitleAtom } from "../../utils/jotai";
 import { useRef, useState } from "react";
@@ -116,13 +116,7 @@ const TodoUpdatePage: React.FC = () => {
   };
 
   if (response.isLoading) {
-    return (
-      <Box className="w-full mt-8">
-        <Skeleton />
-        <Skeleton animation="wave" />
-        <Skeleton animation={false} />
-      </Box>
-    );
+    return <></>;
   }
 
   if (response.isError || !response.data) {
