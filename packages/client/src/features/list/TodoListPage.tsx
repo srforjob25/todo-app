@@ -50,7 +50,7 @@ const TodoListPage: React.FC = () => {
   }
 
   return (
-    <Box>
+    <Box className="mb-10">
       <TabContext value={tabTypeValue}>
         <TabList onChange={handleTabChange}>
           <Tab label="未完了" value={TabType.INCOMPLETE} />
