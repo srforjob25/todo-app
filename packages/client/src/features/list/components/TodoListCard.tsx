@@ -29,7 +29,7 @@ const TodoListCard: React.FC<Props> = (props: Props) => {
     } else if (diffDays <= 7) {
       return "bg-yellow-300";
     } else {
-      return "bg-green-300";
+      return "bg-blue-300";
     }
   };
 
