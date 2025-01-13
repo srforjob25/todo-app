@@ -68,7 +68,7 @@ const TodoListCard: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <Card className={`shadow-lg border-2 my-4 bg-opacity-10 ${getCardBackgroundColor()}`}>
+    <Card className={`p-2 shadow-lg border-2 my-4 bg-opacity-10 ${getCardBackgroundColor()}`}>
       <Box className="flex">
         <Box className="flex items-center mx-3">
           {todo.completed ? (
@@ -83,11 +83,13 @@ const TodoListCard: React.FC<Props> = (props: Props) => {
         </Box>
         <Box className="flex flex-col grow">
           <Box className="my-4">
-            <Typography variant="h5" className="font-bold">
+            <Typography variant="h5" className="font-bold line-clamp-1">
               {todo.title}
             </Typography>
           </Box>
-          <Box>{todo.description}</Box>
+          <Box>
+            <span className="line-clamp-3">{todo.description}</span>
+          </Box>
           <Box className="flex items-end my-2">
             <Box className="grow flex items-center">
               <AlarmIcon className="text-gray-500 mr-1" fontSize="small" />
