@@ -1,7 +1,7 @@
 import { Box, Button } from "@mui/material";
 import { trpc } from "../../utils/trpc";
-import { countAtom } from "../../utils/jotai";
-import { useAtom } from "jotai";
+import { countAtom, headerTitleAtom } from "../../utils/jotai";
+import { useAtom, useSetAtom } from "jotai";
 
 const HogePage: React.FC = () => {
   const response = trpc.todo.getTodos.useQuery();
@@ -9,6 +9,9 @@ const HogePage: React.FC = () => {
   const todos = response.data;
 
   const [count, setCount] = useAtom(countAtom);
+
+  const setHeaderTitle = useSetAtom(headerTitleAtom);
+  setHeaderTitle("ToDo一覧");
 
   return (
     <Box>
