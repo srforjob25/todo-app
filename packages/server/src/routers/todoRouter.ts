@@ -25,4 +25,14 @@ export const todoRouter = trpc.router({
         },
       });
     }),
+  delete: trpc.procedure.input(z.object({ id: z.number() })).mutation(({ input }) => {
+    return prisma.todo.update({
+      where: {
+        id: input.id,
+      },
+      data: {
+        deleted: true,
+      },
+    });
+  }),
 });

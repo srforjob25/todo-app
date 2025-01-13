@@ -34,6 +34,7 @@ const TodoListCard: React.FC<Props> = (props: Props) => {
   };
 
   const updateMutation = trpc.todo.updateCompletedStatus.useMutation();
+  const deleteMutation = trpc.todo.delete.useMutation();
 
   const trpcUtils = trpc.useUtils();
 
@@ -46,6 +47,20 @@ const TodoListCard: React.FC<Props> = (props: Props) => {
       {
         onSuccess: () => {
           toast.success("変更しました！");
+          trpcUtils.todo.getTodosOrderByDueDateAsc.invalidate();
+        },
+      },
+    );
+  };
+
+  const handleDeleteButtonClick = () => {
+    deleteMutation.mutate(
+      {
+        id: todo.id,
+      },
+      {
+        onSuccess: () => {
+          toast.success("削除しました！");
           trpcUtils.todo.getTodosOrderByDueDateAsc.invalidate();
         },
       },
@@ -81,7 +96,7 @@ const TodoListCard: React.FC<Props> = (props: Props) => {
             <IconButton className="pb-0 text-blue-600">
               <UpdateIcon fontSize="large" />
             </IconButton>
-            <IconButton className="pb-0 text-red-600">
+            <IconButton className="pb-0 text-red-600" onClick={handleDeleteButtonClick}>
               <DeleteIcon fontSize="large" />
             </IconButton>
           </Box>
