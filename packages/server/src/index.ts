@@ -27,5 +27,5 @@ app.get("/prisma", async (request: Request, response: Response) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Hello World!`);
+  console.log(`app listening on port ${PORT}`);
 });
