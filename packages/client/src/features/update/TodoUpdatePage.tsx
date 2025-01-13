@@ -1,18 +1,27 @@
+import { useNavigate, useParams } from "react-router-dom";
+import { trpc } from "../../utils/trpc";
+import toast from "react-hot-toast";
+import { Backdrop, Box, Button, CircularProgress, FormHelperText, Skeleton, TextField } from "@mui/material";
 import { useSetAtom } from "jotai";
 import { headerTitleAtom } from "../../utils/jotai";
-import { Backdrop, Box, Button, CircularProgress, FormHelperText, TextField } from "@mui/material";
 import { useRef, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import { trpc } from "../../utils/trpc";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
-const TodoCreatePage: React.FC = () => {
+type Params = {
+  id: string;
+};
+
+const TodoUpdatePage: React.FC = () => {
   const navigate = useNavigate();
 
+  const params = useParams<Params>();
+  const targetId = Number(params.id);
+
   const setHeaderTitle = useSetAtom(headerTitleAtom);
-  setHeaderTitle("ToDo新規作成");
+  setHeaderTitle("ToDo更新");
+
+  const response = trpc.todo.getTodoById.useQuery({ id: targetId });
 
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLInputElement>(null);
@@ -23,9 +32,6 @@ const TodoCreatePage: React.FC = () => {
   const [dueDateError, setDueDateError] = useState<boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
-
-  const createTodoMutation = trpc.todo.create.useMutation();
-  const trpcUtils = trpc.useUtils();
 
   const handleTitleInputChange = () => {
     if (titleError && titleRef.current?.value) {
@@ -45,7 +51,10 @@ const TodoCreatePage: React.FC = () => {
     }
   };
 
-  const handleCreateButtonClick = () => {
+  const updateTodoMutation = trpc.todo.update.useMutation();
+  const trpcUtils = trpc.useUtils();
+
+  const handleUpdateButtonClick = () => {
     const title = titleRef.current?.value;
     const description = descriptionRef.current?.value;
 
@@ -57,23 +66,24 @@ const TodoCreatePage: React.FC = () => {
 
     const dueDate = new Date(dueDateString!);
 
-    createTodo(title!, description!, dueDate);
+    updateTodo(title!, description!, dueDate);
   };
 
-  const createTodo = (title: string, description: string, dueDate: Date) => {
+  const updateTodo = (title: string, description: string, dueDate: Date) => {
     setLoading(true);
 
-    createTodoMutation.mutate(
+    updateTodoMutation.mutate(
       {
+        id: targetId,
         title: title,
         description: description,
         dueDate: dueDate,
       },
       {
         onSuccess: () => {
-          trpcUtils.todo.getTodosOrderByDueDateAsc.invalidate();
+          trpcUtils.todo.getTodoById.invalidate();
           setLoading(false);
-          toast.success("作成しました！");
+          toast.success("更新しました！");
           navigate("/list");
         },
       },
@@ -105,6 +115,23 @@ const TodoCreatePage: React.FC = () => {
     return result;
   };
 
+  if (response.isLoading) {
+    return (
+      <Box className="w-full mt-8">
+        <Skeleton />
+        <Skeleton animation="wave" />
+        <Skeleton animation={false} />
+      </Box>
+    );
+  }
+
+  if (response.isError || !response.data) {
+    toast.error("エラーが発生しました");
+    return <></>;
+  }
+
+  const targetTodo = response.data;
+
   return (
     <Box className="w-8/12 flex flex-col mx-auto">
       <Box className="mt-8 mb-5 flex flex-col justify-center">
@@ -116,6 +143,7 @@ const TodoCreatePage: React.FC = () => {
           error={titleError}
           onChange={handleTitleInputChange}
           autoComplete="off"
+          defaultValue={targetTodo.title}
         />
         {titleError && <FormHelperText className="text-red-600 mt-2 pl-3">入力してください</FormHelperText>}
       </Box>
@@ -129,6 +157,7 @@ const TodoCreatePage: React.FC = () => {
           inputRef={descriptionRef}
           error={descriptionError}
           onChange={handleDescriptionInputChange}
+          defaultValue={targetTodo.description}
         />
         {descriptionError && <FormHelperText className="text-red-600 mt-2 pl-3">入力してください</FormHelperText>}
       </Box>
@@ -143,7 +172,7 @@ const TodoCreatePage: React.FC = () => {
               error: dueDateError,
             },
           }}
-          defaultValue={dayjs()}
+          defaultValue={dayjs(targetTodo.dueDate.toDateString())}
           inputRef={dueDateRef}
           onChange={handleDueDateInputChange}
         />
@@ -152,8 +181,8 @@ const TodoCreatePage: React.FC = () => {
         )}
       </Box>
       <Box className="flex justify-center my-5">
-        <Button variant="contained" className="shadow-md" onClick={handleCreateButtonClick}>
-          作成
+        <Button variant="contained" className="shadow-md" onClick={handleUpdateButtonClick}>
+          更新
         </Button>
       </Box>
       <Box>
@@ -165,4 +194,4 @@ const TodoCreatePage: React.FC = () => {
   );
 };
 
-export default TodoCreatePage;
+export default TodoUpdatePage;

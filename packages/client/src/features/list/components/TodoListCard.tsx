@@ -7,12 +7,15 @@ import AlarmIcon from "@mui/icons-material/Alarm";
 import { formatToJapaneseDate, getDateDifferenceInDays } from "../../../utils/dateUtil";
 import { Todo, trpc } from "../../../utils/trpc";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   todo: Todo;
 };
 
 const TodoListCard: React.FC<Props> = (props: Props) => {
+  const navigate = useNavigate();
+
   const { todo } = props;
 
   const getCardBackgroundColor = () => {
@@ -51,6 +54,10 @@ const TodoListCard: React.FC<Props> = (props: Props) => {
         },
       },
     );
+  };
+
+  const handleUpdateButtonClick = () => {
+    navigate(`/update/${todo.id}`);
   };
 
   const handleDeleteButtonClick = () => {
@@ -95,7 +102,7 @@ const TodoListCard: React.FC<Props> = (props: Props) => {
               <AlarmIcon className="text-gray-500 mr-1" fontSize="small" />
               <span className="text-gray-500">{formatToJapaneseDate(todo.dueDate)}</span>
             </Box>
-            <IconButton className="pb-0 text-blue-600">
+            <IconButton className="pb-0 text-blue-600" onClick={handleUpdateButtonClick}>
               <UpdateIcon fontSize="large" />
             </IconButton>
             <IconButton className="pb-0 text-red-600" onClick={handleDeleteButtonClick}>

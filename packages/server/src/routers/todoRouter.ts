@@ -13,20 +13,17 @@ export const todoRouter = trpc.router({
       },
     });
   }),
-  updateCompletedStatus: trpc.procedure
+  getTodoById: trpc.procedure
     .input(
       z.object({
         id: z.number(),
-        completed: z.boolean(),
       }),
     )
-    .mutation(({ input }) => {
-      return prisma.todo.update({
+    .query(({ input }) => {
+      const id = input.id;
+      return prisma.todo.findUnique({
         where: {
-          id: input.id,
-        },
-        data: {
-          completed: input.completed,
+          id: id,
         },
       });
     }),
@@ -42,6 +39,7 @@ export const todoRouter = trpc.router({
       const title = input.title;
       const description = input.description;
       const dueDate = input.dueDate;
+
       return prisma.todo.create({
         data: {
           title: title,
@@ -60,4 +58,46 @@ export const todoRouter = trpc.router({
       },
     });
   }),
+  update: trpc.procedure
+    .input(
+      z.object({
+        id: z.number(),
+        title: z.string(),
+        description: z.string(),
+        dueDate: z.date(),
+      }),
+    )
+    .mutation(({ input }) => {
+      const title = input.title;
+      const description = input.description;
+      const dueDate = input.dueDate;
+
+      return prisma.todo.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          title: title,
+          description: description,
+          dueDate: dueDate,
+        },
+      });
+    }),
+  updateCompletedStatus: trpc.procedure
+    .input(
+      z.object({
+        id: z.number(),
+        completed: z.boolean(),
+      }),
+    )
+    .mutation(({ input }) => {
+      return prisma.todo.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          completed: input.completed,
+        },
+      });
+    }),
 });
